@@ -1,0 +1,60 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Sat Aug 27 13:12:26 2022
+[*]
+[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\i2c_master_tb_20220827_211035.vcd"
+[dumpfile_mtime] "Sat Aug 27 13:10:35 2022"
+[dumpfile_size] 369212
+[savefile] "D:\FPGA\verilog\i2c_master_test\build\wave.gtkw"
+[timestart] 324100
+[size] 1920 1017
+[pos] -1 -1
+*-15.429397 40632 3896 6520 9144 11768 14392 17016 19640 22264 27512 30136 32760 35384 38008 40632 43256 45880 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] i2c_master_tb.
+[sst_width] 197
+[signals_width] 198
+[sst_expanded] 1
+[sst_vpaned_height] 321
+@22
+i2c_master_tb.u_i2c_master.curr_state[7:0]
+@28
+i2c_master_tb.u_i2c_master.sda_in
+i2c_master_tb.u_i2c_master.sda_filter
+i2c_master_tb.u_i2c_master.sda_out
+@22
+i2c_master_tb.u_i2c_master.cnt_sda[7:0]
+@800200
+-Group
+@23
+i2c_master_tb.u_i2c_master.read_data[7:0]
+@28
+i2c_master_tb.u_i2c_master.read_en
+@1000200
+-Group
+@800200
+-Group
+@22
+i2c_master_tb.u_i2c_master.write_data[7:0]
+@28
+i2c_master_tb.u_i2c_master.write_en
+@1000200
+-Group
+@22
+i2c_master_tb.u_i2c_master.slave_addr[7:0]
+@28
+[color] 2
+i2c_master_tb.u_i2c_master.data_send[7:0]
+@22
+i2c_master_tb.u_i2c_master.cnt_sda[7:0]
+@800200
+-Group
+@28
+i2c_master_tb.u_i2c_master.flag_stop
+i2c_master_tb.u_i2c_master.flag_start
+i2c_master_tb.u_i2c_master.flag_restar
+i2c_master_tb.u_i2c_master.flag_nack
+i2c_master_tb.u_i2c_master.flag_ack
+@1000200
+-Group
+[pattern_trace] 1
+[pattern_trace] 0

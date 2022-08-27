@@ -1,0 +1,43 @@
+VCD info: dumpfile i2c_master_tb.vcd opened for output.
+
+[              120500]addr:0xa0 word_addr:0x1234 byte:0x00 i2c_eeprom_random_read done!
+
+
+[              169372]byte:0xac i2c_recv_one_byte done!
+
+
+[              169372]addr:0xa0 num:0x08 i2c_recv_bytes start!>>>
+[              215784]byte:0x11
+[              239400]byte:0x22
+[              263016]byte:0x33
+[              286632]byte:0x44
+[              310248]byte:0x55
+[              333864]byte:0x66
+[              357480]byte:0x77
+[              381096]byte:0x88
+[              407172]i2c_recv_bytes done!<<<
+
+
+[              407172]i2c_sim_rd start!>>>
+[              431116]rd:0xa0
+[              454732]rd:0xd1
+[              454732]i2c_sim_rd done!<<<
+
+
+[              456044]i2c_sim_rd start!>>>
+[              479988]rd:0xb0
+[              503604]rd:0xd2
+[              503604]i2c_sim_rd done!<<<
+
+
+[              504916]i2c_sim_rd start!>>>
+[              528860]rd:0xc0
+[              552476]rd:0xa0
+[              576092]rd:0x0a
+[              599708]rd:0xaa
+[              599708]i2c_sim_rd done!<<<
+
+
+[              650000]simulation done!
+
+./tb/i2c_master_tb.v:397: $finish called at 650000 (1ns)
