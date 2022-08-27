@@ -1,5 +1,5 @@
 $date
-	Sun Aug 28 00:38:44 2022
+	Sun Aug 28 01:05:19 2022
 $end
 $version
 	Icarus Verilog
@@ -7,7 +7,8 @@ $end
 $timescale
 	1ns
 $end
-$scope module i2c_master_tb $end
+$scope module test_case $end
+$scope module u_i2c_master_tb $end
 $var wire 1 ! sda_out $end
 $var wire 1 " scl_out $end
 $var wire 1 # read_en $end
@@ -127,6 +128,7 @@ $var reg 8 p data_send [7:0] $end
 $var reg 8 q num [7:0] $end
 $var integer 32 r i [31:0] $end
 $var integer 32 s j [31:0] $end
+$upscope $end
 $upscope $end
 $upscope $end
 $enddefinitions $end

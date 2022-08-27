@@ -386,14 +386,14 @@ i2c_master#(
 //                仿真文件生成
 //**************************************************************************
 
-initial
-begin
-    $dumpfile("i2c_master_tb.vcd");  //生成vcd文件，记录仿真信息
-    $dumpvars(0, i2c_master_tb);     //指定层次数，记录信号，0时刻开始
-    #650000 
-    $display("\n[%d]simulation done!\n",$time);
-    $finish;
-end 
+// initial
+// begin
+//     $dumpfile("i2c_master_tb.vcd");  //生成vcd文件，记录仿真信息
+//     $dumpvars(0, i2c_master_tb);     //指定层次数，记录信号，0时刻开始
+//     #650000 
+//     $display("\n[%d]simulation done!\n",$time);
+//     $finish;
+// end 
 
 endmodule
 

@@ -1,7 +1,7 @@
 @REM 控制台不显示命令本身
 @echo off
 
-set MODULE_NAME=i2c_master_tb
+set MODULE_NAME=test_case
 set WORKSPACE_DIR=%~dp0
 set TB_DIR=%WORKSPACE_DIR%\tb
 

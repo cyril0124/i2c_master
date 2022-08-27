@@ -1,4 +1,4 @@
-VCD info: dumpfile i2c_master_tb.vcd opened for output.
+VCD info: dumpfile test_case.vcd opened for output.
 
 [              120500]addr:0xa0 word_addr:0x1234 byte:0x00 i2c_eeprom_random_read done!
 
@@ -37,4 +37,7 @@ VCD info: dumpfile i2c_master_tb.vcd opened for output.
 [              599708]rd:0xaa
 [              599708]i2c_sim_rd done!<<<
 
-./tb/testCase.v:42: $finish called at 601020 (1ns)
+
+[              601020]simulation done!
+
+./tb/test_case.v:44: $finish called at 601020 (1ns)
