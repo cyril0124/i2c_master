@@ -1,6 +1,11 @@
 //编译源文件位置
-./tb/i2c_master_tb.v
+//./tb/i2c_master_tb.v
+./tb/testCase.v
 ./src/i2c_master.v
+
++incdir+./src
++incdir+./src/i2c_slave
++incdir+./tb
 
 /* sample:
 

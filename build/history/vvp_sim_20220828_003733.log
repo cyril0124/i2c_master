@@ -37,7 +37,4 @@ VCD info: dumpfile i2c_master_tb.vcd opened for output.
 [              599708]rd:0xaa
 [              599708]i2c_sim_rd done!<<<
 
-
-[              650000]simulation done!
-
-./tb/i2c_master_tb.v:397: $finish called at 650000 (1ns)
+./tb/testCase.v:42: $finish called at 601020 (1ns)
