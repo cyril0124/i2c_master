@@ -404,26 +404,23 @@ end
 //**************************************************************************
 generate
     if(FILTER == 1'b1) begin
-        reg [3:0] sda_filter_cnt;
         reg sda_filter_reg;
         assign sda_filter = sda_filter_reg;
+        reg [FILTER_WIDTH-1:0] sda_pipe;
 
         always @(posedge clk or negedge rst_n) 
         begin
-            if(rst_n == 1'b0) 
-                sda_filter_cnt[3:0] <= #U_DLY 4'b0000;
-            else
-                sda_filter_cnt[3:0] <= #U_DLY {sda_filter_cnt[2:0],sda_in};
-        end
-
-        always @(posedge clk or negedge rst_n) 
-        begin
-            if(rst_n == 1'b0) 
+            if(rst_n == 1'b0) begin
+                sda_pipe[FILTER_WIDTH-1:0] <= #U_DLY {FILTER_WIDTH{1'b1}};
                 sda_filter_reg <= #U_DLY 1'b1;
-            else if(sda_filter_cnt[FILTER_WIDTH-1:0] == {FILTER_WIDTH{1'b0}})
-                sda_filter_reg <=  #U_DLY 1'b0;
-            else   
-                sda_filter_reg <= #U_DLY 1'b1;
+            end
+            else begin
+                sda_pipe[FILTER_WIDTH-1:0] <= #U_DLY {sda_pipe[FILTER_WIDTH-2:0],sda_in};
+                if(&sda_pipe[FILTER_WIDTH-1:0] == 1'b1)
+                    sda_filter_reg <=  #U_DLY 1'b1;
+                else if(|sda_pipe[FILTER_WIDTH-1:0] == 1'b0)
+                    sda_filter_reg <= #U_DLY 1'b0;
+            end
         end
     end
     else begin

@@ -37,4 +37,7 @@ VCD info: dumpfile test_case.vcd opened for output.
 [              599708]rd:0xaa
 [              599708]i2c_sim_rd done!<<<
 
-./tb/test_case.v:43: $finish called at 601020 (1ns)
+
+[              602020]simulation done!
+
+./tb/test_case.v:45: $finish called at 602020 (1ns)

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sat Aug 27 17:03:03 2022
+[*] Sat Aug 27 17:50:30 2022
 [*]
-[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220828_010300.vcd"
-[dumpfile_mtime] "Sat Aug 27 17:03:00 2022"
-[dumpfile_size] 353715
+[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220828_015000.vcd"
+[dumpfile_mtime] "Sat Aug 27 17:50:00 2022"
+[dumpfile_size] 353290
 [savefile] "D:\FPGA\verilog\i2c_master_test\build\wave.gtkw"
 [timestart] 0
 [size] 1920 1017
 [pos] -1 -1
-*-16.316370 94200 3896 6520 9144 11768 14392 17016 19640 22264 27512 30136 32760 35384 38008 40632 43256 45880 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-17.316370 76300 3896 6520 9144 11768 14392 17016 19640 22264 27512 30136 32760 35384 38008 40632 43256 45880 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test_case.
 [treeopen] test_case.u_i2c_master_tb.
 [sst_width] 197
@@ -20,13 +20,15 @@
 test_case.u_i2c_master_tb.u_i2c_master.curr_state[7:0]
 @28
 test_case.u_i2c_master_tb.u_i2c_master.sda_in
+@29
 test_case.u_i2c_master_tb.u_i2c_master.sda_filter
+@28
 test_case.u_i2c_master_tb.u_i2c_master.sda_out
 @22
 test_case.u_i2c_master_tb.u_i2c_master.cnt_sda[7:0]
 @800200
 -Group
-@23
+@22
 test_case.u_i2c_master_tb.u_i2c_master.read_data[7:0]
 @28
 test_case.u_i2c_master_tb.u_i2c_master.read_en
