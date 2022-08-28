@@ -77,7 +77,7 @@ input [7:0] myReg7;
 // local wires and regs
 reg sdaDeb;
 reg sclDeb;
-reg [`DEB_I2C_LEN-1:0] s;
+reg [`DEB_I2C_LEN-1:0] sdaPipe;
 reg [`DEB_I2C_LEN-1:0] sclPipe;
 
 reg [`SCL_DEL_LEN-1:0] sclDelayed;

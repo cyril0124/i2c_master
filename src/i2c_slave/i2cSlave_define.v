@@ -26,7 +26,7 @@
 // If you are using a clock frequency below 24MHz, then the macro
 // for SDA_DEL_LEN will result in compile errors for i2cSlave.v
 // you will need to hand tweak the SDA_DEL_LEN constant definition
-`define CLK_FREQ 48
+`define CLK_FREQ 12
 
 // Debounce SCL and SDA over this many clock ticks
 // The rise time of SCL and SDA can be up to 1000nS (in standard mode)
@@ -38,7 +38,7 @@
 // Also increases data hold time and decreases data setup time
 // during an I2C read operation
 // 10 ticks = 208nS @ 48MHz
-`define DEB_I2C_LEN (10*`CLK_FREQ)/48
+`define DEB_I2C_LEN (10*`CLK_FREQ)/12
 
 // Delay SCL for use as internal sampling clock
 // Using delayed version of SCL to ensure that 
@@ -50,7 +50,7 @@
 // This delay also has the effect of adding extra hold time to the data
 // with respect to SCL falling edge. I2C spec requires 0nS of data hold time.
 // 10 ticks = 208nS @ 48MHz
-`define SCL_DEL_LEN (10*`CLK_FREQ)/48
+`define SCL_DEL_LEN (10*`CLK_FREQ)/12
 
 // Delay SDA for use in start/stop detection
 // Use delayed SDA during start/stop detection to avoid
@@ -64,5 +64,5 @@
 // in the presence of regular data transitions.
 // This delay time should be less than 100nS
 // 4 ticks = 83nS @ 48MHz
-`define SDA_DEL_LEN (4*`CLK_FREQ)/48
+`define SDA_DEL_LEN (4*`CLK_FREQ)/12
 
