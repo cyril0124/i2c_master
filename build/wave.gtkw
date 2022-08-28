@@ -1,101 +1,89 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Aug 28 07:35:28 2022
+[*] Sun Aug 28 14:42:51 2022
 [*]
-[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220828_153413.vcd"
-[dumpfile_mtime] "Sun Aug 28 07:34:13 2022"
-[dumpfile_size] 637532
+[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220828_224146.vcd"
+[dumpfile_mtime] "Sun Aug 28 14:41:46 2022"
+[dumpfile_size] 135463
 [savefile] "D:\FPGA\verilog\i2c_master_test\build\wave.gtkw"
-[timestart] 60515000
+[timestart] 0
 [size] 1920 1017
 [pos] -1 -1
-*-20.907438 65985000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-24.542156 72662000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test_case.
 [treeopen] test_case.u_test_harness.
-[treeopen] test_case.u_test_harness.u_i2c_master.
-[treeopen] test_case.u_test_harness.u_i2cSlaveTop.
-[treeopen] test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.
+[treeopen] test_case.u_test_harness.u_i2c_master_top.
+[treeopen] test_case.u_test_harness.u_i2c_master_top.u_i2c_master.
 [sst_width] 197
-[signals_width] 270
+[signals_width] 195
 [sst_expanded] 1
 [sst_vpaned_height] 321
-@22
-test_case.u_test_harness.u_i2c_master.curr_state[7:0]
-@28
-test_case.u_test_harness.u_i2c_master.sda_filter
-[color] 3
-test_case.u_test_harness.u_i2c_master.sda_out
-[color] 1
-test_case.u_test_harness.u_i2c_master.scl_out
-test_case.u_test_harness.u_i2c_master.scl_pos
-test_case.u_test_harness.u_i2c_master.scl_neg
-@22
-test_case.u_test_harness.u_i2c_master.cnt_sda[7:0]
 @800200
 -Group
 @22
-test_case.u_test_harness.u_i2c_master.read_data[7:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.curr_state[7:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.read_data[7:0]
 @28
-test_case.u_test_harness.u_i2c_master.read_en
-@1000200
--Group
-@800200
--Group
-@22
-test_case.u_test_harness.u_i2c_master.write_data[7:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.read_en
+@23
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.write_data[7:0]
 @28
-test_case.u_test_harness.u_i2c_master.write_en
-@1000200
--Group
-@22
-test_case.u_test_harness.u_i2c_master.slave_addr[7:0]
-@28
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.write_en
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_filter
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_out
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen
 [color] 2
-test_case.u_test_harness.u_i2c_master.data_send[7:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_out
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_neg
 @22
-test_case.u_test_harness.u_i2c_master.cnt_sda[7:0]
-@800200
--Group
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.cnt_sda[7:0]
+@420
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.PRESCALER
 @28
-test_case.u_test_harness.u_i2c_master.flag_stop
-test_case.u_test_harness.u_i2c_master.flag_start
-test_case.u_test_harness.u_i2c_master.flag_restar
-test_case.u_test_harness.u_i2c_master.flag_nack
-test_case.u_test_harness.u_i2c_master.flag_ack
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_pos
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_restar
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_start
 @1000200
 -Group
 @800200
 -Group
 @28
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.sdaDeb
-@29
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.sclDeb
-@28
-test_case.u_test_harness.u_i2cSlaveTop.sda
-test_case.u_test_harness.u_i2c_master.clk
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.startStopDetState[1:0]
+test_case.u_test_harness.memory.SDA
+test_case.u_test_harness.memory.SDA_OE
+test_case.u_test_harness.memory.SDA_DO
 @c00022
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
+test_case.u_test_harness.memory.ShiftRegister[7:0]
 @28
-(0)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(1)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(2)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(3)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(4)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(5)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(6)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
-(7)test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_serialInterface.rxData[7:0]
+(0)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(1)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(2)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(3)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(4)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(5)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(6)test_case.u_test_harness.memory.ShiftRegister[7:0]
+(7)test_case.u_test_harness.memory.ShiftRegister[7:0]
 @1401200
 -group_end
-@22
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_registerInterface.addr[7:0]
 @28
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_registerInterface.writeEn
+test_case.u_test_harness.memory.SCL
+test_case.u_test_harness.memory.START_Rcvd
+test_case.u_test_harness.memory.CTRL_Rcvd
+test_case.u_test_harness.memory.STOP_Rcvd
+test_case.u_test_harness.memory.ADDR_Rcvd
+test_case.u_test_harness.memory.MACK_Rcvd
 @22
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_registerInterface.dataIn[7:0]
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_registerInterface.myReg3[7:0]
-test_case.u_test_harness.u_i2cSlaveTop.u_i2cSlave.u_registerInterface.myReg2[7:0]
+test_case.u_test_harness.memory.RdPointer[7:0]
+@24
+test_case.u_test_harness.memory.BitCounter[3:0]
+@28
+test_case.u_test_harness.memory.RdWrBit
+@22
+test_case.u_test_harness.memory.ControlByte[7:0]
+@28
+test_case.u_test_harness.memory.WriteActive
 @1000200
 -Group
+@22
+test_case.u_test_harness.memory.MemoryByte01[7:0]
 [pattern_trace] 1
 [pattern_trace] 0

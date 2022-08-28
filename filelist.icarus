@@ -1,13 +1,8 @@
 //编译源文件位置
 ./tb/test_case.v
 ./src/i2c_master.v
-
-./src/i2c_slave/i2cSlave.v
-./src/i2c_slave/i2cSlaveTop.v
-./src/i2c_slave/registerInterface.v
-./src/i2c_slave/serialInterface.v
-./src/i2c_slave/timescale.v
-./src/i2c_slave/i2cSlave_define.v
+//./src/i2c_master_top.v
+./src/i2c_slave/24AA02.v
 
 +incdir+./src
 +incdir+./src/i2c_slave
