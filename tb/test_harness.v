@@ -9,7 +9,7 @@ reg clk;
 reg rst_n;
 
 parameter U_DLY = 1;
-parameter CLK_PERIOD = 83; //10MHz--100 12MHz--83 50MHz--20
+parameter CLK_PERIOD = 10; //10MHz--100 12MHz--83 50MHz--20 48MHz--10
 
 initial begin
     clk = 0;
@@ -18,8 +18,10 @@ end
 
 initial begin
     #0 rst_n = 1'b1;
-    #(CLK_PERIOD*2) rst_n = 1'b0;
-    #(CLK_PERIOD/2) rst_n = 1'b1;
+    repeat(4) @(posedge clk);
+    rst_n = 1'b0;
+    repeat(4) @(posedge clk);
+    rst_n = 1'b1;
 end
 
 //**************************************************************************
@@ -314,18 +316,16 @@ initial begin
 end
 
 
-
-
 i2c_master#(
-    .PRESCALER  ( 3 )
+    .PRESCALER  ( 30 )
 )u_i2c_master(
     .clk        ( clk        ),
     .rst_n      ( rst_n      ),
 
     .init_finish(init_finish),
-    .scl_in     (            ),
+    // .scl_in     (            ),
     .scl_out    ( scl_out    ),
-    .sda_in     ( sda_in     ),
+    .sda_in     ( sda_in     ), //仿真i2c slave时,需把.sda_in()输入设置为sda,其他情况则设置成sda_in
     .sda_out    ( sda_out    ),
 
     .slave_addr ( i2c_slave_addr ),
@@ -346,6 +346,10 @@ i2c_master#(
     .flag_nack  ( flag_nack  ),
     .flag_stop  ( flag_stop  ) 
 );
+
+//**************************************************************************
+//                i2c_slave 模块例化
+//**************************************************************************
 
 
 

@@ -35,7 +35,7 @@ module i2c_master
 #(
     parameter FILTER = 1,
     parameter U_DLY = 1,
-    parameter PRESCALER = 3 //400KHz = 2500ns = 1250ns *2 = 83ns *15 *2 = 312.5ns *4 *2 = 4*clk(83ns) *4 *2
+    parameter PRESCALER = 3 //400KHz = 2500ns = 1250ns *2 = 83ns *15 *2 = 312.5ns *4 *2 = 4*clk(83ns) *4 *2 = 30*clk(10ns) *4 *2
 )
 (
     input   wire        clk, 
@@ -43,8 +43,9 @@ module i2c_master
 
     input   wire        init_finish,
 
-    input   wire        scl_in,
+    // input   wire        scl_in,
     output  reg         scl_out,
+    // output  reg         scl_oen,
     input   wire        sda_in,
     output  reg         sda_out,
 
@@ -169,13 +170,13 @@ begin
                 next_state =STATE_WR_DAT;
         end
         STATE_ACK1: begin //4'h5
-            if(scl_pos == 1'b1 && sda_filter == 1'b0) begin
+            if(scl_pos == 1'b1 && sda_filter == 1'b0) begin//slave有响应
                 if(i2c_rw == 1'b0) //写状态
                     next_state = STATE_WR_DAT;
                 else //写完数据后，想立即读数据，需要restart
                     next_state = STATE_RESTART;
             end
-            else if(scl_pos == 1'b1 && sda_filter == 1'b1)
+            else if(scl_pos == 1'b1 && sda_filter == 1'b1) //slave无响应
                 next_state = STATE_STOP;
             else
                 next_state = STATE_ACK1;
@@ -236,7 +237,7 @@ begin
     if(rst_n == 1'b0) begin
         sda_out <= #U_DLY 1'b1;
     end
-    else if(curr_state == STATE_ACK2)
+    else if(curr_state == STATE_ACK2) //master响应slave
         sda_out <= #U_DLY 1'b0;
     else begin
         case (curr_state)
@@ -258,7 +259,8 @@ begin
                 end
             end
             STATE_NACK: begin
-                if(scl_pos == 1'b1)
+                // if(scl_pos == 1'b1)
+                if(scl_cnt[3:0] == 4'b0111 && cnt_clk_reload == 1'b1)
                     sda_out <= #U_DLY 1'b0;
             end
             STATE_STOP: begin

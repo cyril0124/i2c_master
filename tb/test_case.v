@@ -39,7 +39,18 @@ initial begin
         u_test_harness.i2c_send_bytes(8'hc0,64'haa_0a_a0,8'h3);
         u_test_harness.i2c_sim_rd(4);
     join
+    
+    // i2c slave模块测试
+    // fork
+    //     u_test_harness.i2c_send_bytes({7'h3c,1'b0},64'haa_03,8'h2);
+    //     u_test_harness.i2c_sim_rd(3);
+    // join
 
+    // fork
+    //     u_test_harness.i2c_recv_one_byte({7'h3c,1'b0});
+    //     u_test_harness.i2c_sim_wr(64'hac,8'h1);
+    // join
+    
     #1000
     $display("\n[%d]simulation done!\n",$time);
     $finish;
@@ -52,6 +63,8 @@ initial
 begin
     $dumpfile("test_case.vcd");  //生成vcd文件，记录仿真信息
     $dumpvars(0, test_case);     //指定层次数，记录信号，0时刻开始
+    #650000
+    $finish;
 end 
 
 endmodule
