@@ -150,14 +150,15 @@ begin
         end
         STATE_ACK0: begin //4'h3 //还需判断restart
             if(scl_pos == 1'b1 && sda_filter == 1'b0) begin
+            // if(scl_neg == 1'b1 && flag_ack == 1'b1) begin
                 if(i2c_rw == 1'b0)
                     next_state = STATE_WR_DAT;
                 else    
                     next_state = STATE_RD_DAT;
             end
-            else if(scl_pos == 1'b1 && sda_filter == 1'b1) begin
+            else if(scl_pos == 1'b1 && sda_filter == 1'b1) 
+            // else if(scl_neg == 1'b1 && flag_ack == 1'b0)
                 next_state = STATE_STOP;
-            end
             else
                 next_state = STATE_ACK0;
         end
@@ -201,6 +202,7 @@ begin
         end
         STATE_NACK: begin //4'h8
             if(scl_pos == 1'b1)
+            // if(scl_neg == 1'b1 && flag_nack == 1'b1)
                 next_state = STATE_STOP;
             else
                 next_state = STATE_NACK;
@@ -505,6 +507,28 @@ begin
         flag_nack <= #U_DLY 1'b0;
     end
 end
+
+// always @(posedge clk or negedge rst_n) 
+// begin
+//     if(rst_n == 1'b0) begin
+//         flag_ack <= #U_DLY 1'b0;
+//         flag_nack <= #U_DLY 1'b0;
+//     end
+//     else if (
+//             (curr_state == STATE_ACK0 ) ||
+//             (curr_state == STATE_ACK1 ) ||
+//             (curr_state == STATE_ACK2 )
+//     ) begin
+//         if(scl_pos == 1'b1 && sda_filter == 1'b0)
+//             flag_ack <= #U_DLY 1'b1;
+//     end
+//     else if(curr_state == STATE_NACK)
+//         flag_nack <= #U_DLY 1'b1;
+//     else begin
+//         flag_ack <= #U_DLY 1'b0;
+//         flag_nack <= #U_DLY 1'b0;
+//     end
+// end
 
 always @(posedge clk or negedge rst_n) 
 begin

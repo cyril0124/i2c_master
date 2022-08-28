@@ -1,0 +1,2 @@
+VCD info: dumpfile test_case.vcd opened for output.
+./tb/test_case.v:73: $finish called at 65000000 (10ps)

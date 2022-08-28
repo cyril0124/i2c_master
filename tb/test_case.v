@@ -9,7 +9,9 @@ test_harness u_test_harness();
 initial begin
     wait(u_test_harness.u_i2c_master_top.init_finish);
     u_test_harness.u_i2c_master_top.i2c_send_bytes(8'ha0,64'h0b_01,8'h02);
-    #10000
+    // wait(u_test_harness.memory.SDA_OE == 1'b0);
+    // u_test_harness.u_i2c_master_top.i2c_send_bytes(8'ha0,64'h0b_01,8'h02);
+    #1000
     //模拟eeprom 的随机读
     u_test_harness.u_i2c_master_top.i2c_eeprom_random_read(8'ha0,16'h00_01,8'h01);
     // u_test_harness.u_i2c_master_top.i2c_eeprom_random_read(8'ha0,16'h00_00,8'h01);

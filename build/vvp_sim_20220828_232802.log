@@ -1,0 +1,8 @@
+VCD info: dumpfile test_case.vcd opened for output.
+
+[              170356]addr:0xa0 word_addr:0x01 byte:0x00 i2c_eeprom_random_read done!
+
+
+[              171356]simulation done!
+
+./tb/test_case.v:62: $finish called at 17135600 (10ps)
