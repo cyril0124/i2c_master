@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Sun Aug 28 15:04:04 2022
+[*] Tue Aug 30 13:36:43 2022
 [*]
-[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220828_225540.vcd"
-[dumpfile_mtime] "Sun Aug 28 14:55:40 2022"
-[dumpfile_size] 132060
+[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220830_213545.vcd"
+[dumpfile_mtime] "Tue Aug 30 13:35:46 2022"
+[dumpfile_size] 72935
 [savefile] "D:\FPGA\verilog\i2c_master_test\build\wave.gtkw"
-[timestart] 2990000
+[timestart] 0
 [size] 1920 1017
 [pos] -1 -1
-*-22.542156 13310000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-20.497311 4063000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test_case.
 [treeopen] test_case.u_test_harness.
 [treeopen] test_case.u_test_harness.u_i2c_master_top.
@@ -22,6 +22,7 @@
 -Group
 @22
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.curr_state[7:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.next_state[7:0]
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.read_data[7:0]
 @28
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.read_en
@@ -36,17 +37,22 @@ test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_out
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_neg
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_pos
+test_case.u_test_harness.u_i2c_master_top.flag_ack
+test_case.u_test_harness.u_i2c_master_top.flag_nack
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_restar
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_start
+test_case.u_test_harness.u_i2c_master_top.flag_stop
+@29
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen_pre
+@28
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_oen_pre
 @1000200
 -Group
 @800200
 -Group
 @28
 test_case.u_test_harness.memory.SDA
-@29
 test_case.u_test_harness.memory.SDA_OE
-@28
 test_case.u_test_harness.memory.SDA_DO
 @c00022
 test_case.u_test_harness.memory.ShiftRegister[7:0]

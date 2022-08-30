@@ -44,9 +44,9 @@ module i2c_master
 
     input   wire        init_finish,
 
-    // input   wire        scl_in,
+    input   wire        scl_in,
     output  reg         scl_out,
-    // output  reg         scl_oen,
+    output  reg         scl_oen,
     input   wire        sda_in,
     output  reg         sda_out,
     output  reg         sda_oen,
@@ -82,14 +82,17 @@ begin
     end
 end
 */
-reg [7:0]   scl_cnt;
+reg [3:0]   scl_cnt;
 reg [7:0]   cnt_clk;
 reg [3:0]   i2c_begin_dly;
 reg         scl_dly;
 reg         scl_pos;
 reg         scl_neg;
-reg [7:0]   cnt_sda;
+reg [7:0]   num_bit;
 reg [7:0]   data_send;
+
+reg         scl_oen_pre;
+reg         sda_oen_pre;
 
 wire            sda_filter;
 wire            i2c_begin_sig;
@@ -137,33 +140,31 @@ begin
                 next_state = STATE_IDLE;
         end
         STATE_START: begin //4'h1
-            if(scl_cnt[7:0] == 8'b1111_1111 && cnt_clk_reload == 1'b1)
+            if(scl_cnt[3:0] == 4'b1111 && clk_en == 1'b1)
                 next_state = STATE_ADDR;
             else
                 next_state = STATE_START;
         end
         STATE_ADDR: begin //4'h2
-            if( cnt_sda[7:0] == 8'h8 && scl_neg == 1'b1)
+            if( num_bit[7:0] == 8'h8 && scl_neg == 1'b1)
                 next_state = STATE_ACK0;
             else
                 next_state =STATE_ADDR;
         end
         STATE_ACK0: begin //4'h3 //还需判断restart
-            if(scl_pos == 1'b1 && sda_filter == 1'b0) begin
-            // if(scl_neg == 1'b1 && flag_ack == 1'b1) begin
+            if(scl_neg == 1'b1 && flag_ack == 1'b1) begin
                 if(i2c_rw == 1'b0)
                     next_state = STATE_WR_DAT;
                 else    
                     next_state = STATE_RD_DAT;
             end
-            else if(scl_pos == 1'b1 && sda_filter == 1'b1) 
-            // else if(scl_neg == 1'b1 && flag_ack == 1'b0)
+            else if(scl_neg == 1'b1 && flag_ack == 1'b0)
                 next_state = STATE_STOP;
             else
                 next_state = STATE_ACK0;
         end
         STATE_WR_DAT: begin //4'h4
-            if(cnt_sda[7:0] == 8'h8 && scl_neg == 1'b1) begin
+            if(num_bit[7:0] == 8'h8 && scl_neg == 1'b1) begin
                 if(conti_write == 1'b1)
                     next_state = STATE_ACK1;
                 else
@@ -173,19 +174,19 @@ begin
                 next_state =STATE_WR_DAT;
         end
         STATE_ACK1: begin //4'h5
-            if(scl_pos == 1'b1 && sda_filter == 1'b0) begin//slave有响应
+            if(scl_neg == 1'b1 && flag_ack == 1'b1) begin //slave有响应
                 if(i2c_rw == 1'b0) //写状态
                     next_state = STATE_WR_DAT;
                 else //写完数据后，想立即读数据，需要restart
                     next_state = STATE_RESTART;
             end
-            else if(scl_pos == 1'b1 && sda_filter == 1'b1) //slave无响应
+            else if(scl_neg == 1'b1 && flag_ack == 1'b0) //slave无响应
                 next_state = STATE_STOP;
             else
                 next_state = STATE_ACK1;
         end
         STATE_RD_DAT: begin //4'h6
-            if(cnt_sda[7:0] == 8'h8 && scl_neg == 1'b1) begin
+            if(num_bit[7:0] == 8'h8 && scl_neg == 1'b1) begin
                 if(conti_receive == 1'b1)
                     next_state = STATE_ACK2;
                 else
@@ -201,14 +202,13 @@ begin
                 next_state = STATE_ACK2;
         end
         STATE_NACK: begin //4'h8
-            if(scl_pos == 1'b1)
-            // if(scl_neg == 1'b1 && flag_nack == 1'b1)
+            if(scl_cnt[3:0]==4'b1111 && flag_nack == 1'b1)
                 next_state = STATE_STOP;
             else
                 next_state = STATE_NACK;
         end
         STATE_STOP: begin //4'h9
-            if(scl_cnt[7:0] == 8'b1111_1111 && cnt_clk_reload==1'b1)
+            if(scl_cnt[3:0] == 4'b1111 && clk_en==1'b1)
                 next_state = STATE_IDLE;
             else
                 next_state = STATE_STOP;
@@ -220,19 +220,42 @@ begin
     endcase
 end
 
+
 //scl输出
 always @(posedge clk or negedge rst_n) 
 begin
     if(rst_n == 1'b0) begin
         scl_out <= #U_DLY 1'b1;
     end
-    else if(curr_state != STATE_IDLE && curr_state != STATE_STOP) begin
-        if(scl_cnt[7:0]==8'b1111_1111 && cnt_clk_reload==1'b1)
-            scl_out <= #U_DLY ~scl_out;
-    end
     else begin
-        scl_out <= #U_DLY 1'b1;
+        case (curr_state)
+            STATE_START,
+            STATE_ADDR,
+            STATE_ACK0,
+            STATE_WR_DAT,
+            STATE_ACK1,
+            STATE_RD_DAT,
+            STATE_NACK,
+            STATE_RESTART,
+            STATE_STOP,
+            STATE_ACK2: begin
+                if(scl_cnt[3:0]==4'b1111 && clk_en==1'b1)
+                    scl_out <= #U_DLY ~scl_out;
+            end
+            default:
+                scl_out <= #U_DLY 1'b1;
+        endcase
     end
+
+    // else if(curr_state == STATE_NACK && next_state == STATE_STOP)
+    //     scl_out <= #U_DLY 1'b1;
+    // else if(curr_state != STATE_IDLE && curr_state != STATE_STOP) begin
+    //     if(scl_cnt[7:0]==8'b1111_1111 && clk_en==1'b1)
+    //         scl_out <= #U_DLY ~scl_out;
+    // end
+    // else begin
+    //     scl_out <= #U_DLY 1'b1;
+    // end
 end
 
 //sda输出
@@ -246,12 +269,12 @@ begin
     else begin
         case (curr_state)
             STATE_START: begin 
-                if(scl_cnt[7:0] == 8'b0000_1111 && cnt_clk_reload==1'b1)
+                if(scl_cnt[3:0] == 4'b0011 && clk_en==1'b1)
                     sda_out <= #U_DLY 1'b0;
                 else;
             end
             STATE_ADDR: begin
-                if(scl_neg == 1'b1 && cnt_sda[7:0] != 8'h08) begin
+                if(scl_neg == 1'b1 && num_bit[7:0] != 8'h08) begin
                     sda_out <= #U_DLY data_send[7];
                     data_send[7:0] <= #U_DLY {data_send[6:0],1'b1};
                 end
@@ -262,17 +285,17 @@ begin
                 sda_out <= #U_DLY 1'b0;
             end
             STATE_WR_DAT: begin
-                if(scl_neg == 1'b1 && cnt_sda[7:0] != 8'h08) begin
+                if(scl_neg == 1'b1 && num_bit[7:0] != 8'h08) begin
                     sda_out <= #U_DLY data_send[7];
                     data_send[7:0] <= #U_DLY {data_send[6:0],1'b1};
                 end
             end
             STATE_NACK: begin
-                if(scl_cnt[7:0] == 8'b011_1111 && cnt_clk_reload == 1'b1) //提前拉低，防止触发START条件
+                if(scl_cnt[3:0] == 4'b0111 && clk_en == 1'b1) //提前拉低，防止触发START条件
                     sda_out <= #U_DLY 1'b0;
             end
             STATE_STOP: begin
-                if(scl_cnt[7:0] == 8'b0000_1111 && cnt_clk_reload==1'b1)
+                if(scl_cnt[3:0] == 4'b0011 && clk_en==1'b1)
                     sda_out <= #U_DLY 1'b1;
             end
             default: begin
@@ -299,6 +322,72 @@ begin
     end
 end
 
+
+// always @(posedge clk or negedge rst_n) 
+// begin
+//     if(rst_n == 1'b0) begin
+//         scl_oen_pre <= #U_DLY 1'b1;
+//         sda_oen_pre <= #U_DLY 1'b1;
+//     end
+//     else begin
+//         case(curr_state) 
+//             STATE_START: begin
+//                 case(scl_cnt[3:0])
+//                     4'b0001: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b1;
+//                     end
+//                     4'b0011: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b1;
+//                     end
+//                     4'b0111: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b0;
+//                     end
+//                     4'b1111: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b0;
+//                     end
+//                     default: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b1;
+//                     end
+//                 endcase
+//             end
+//             STATE_ADDR: begin
+//                 case(scl_cnt[3:0])
+//                     4'b0001: begin
+//                         scl_oen_pre <= #U_DLY 1'b0;
+//                         sda_oen_pre <= #U_DLY data_send[7];
+//                     end
+//                     4'b0011: begin
+//                         scl_oen_pre <= #U_DLY 1'b0;
+//                         sda_oen_pre <= #U_DLY data_send[7];
+//                     end
+//                     4'b0111: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY data_send[7];
+//                     end
+//                     4'b1111: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY data_send[7];
+//                     end
+//                     default: begin
+//                         scl_oen_pre <= #U_DLY 1'b1;
+//                         sda_oen_pre <= #U_DLY 1'b1;
+//                     end
+//                 endcase                
+//             end
+//             default: begin
+//                 scl_oen_pre <= #U_DLY 1'b1;
+//                 sda_oen_pre <= #U_DLY 1'b1;
+//             end
+//         endcase
+//     end
+// end
+
+
 always @(posedge clk or negedge rst_n) 
 begin
     if(rst_n == 1'b0) begin
@@ -308,6 +397,8 @@ begin
         case (curr_state)
             STATE_START: 
                 data_send[7:0] <= #U_DLY {slave_addr[7:1],i2c_rw};
+            // STATE_ADDR:
+            //     data_send[7:0] <= #U_DLY {data_send[6:0],1'b1};
             STATE_ACK0,
             STATE_ACK1: begin
                 if(write_en == 1'b1)
@@ -341,39 +432,39 @@ end
 //**************************************************************************
 //                scl信号
 //**************************************************************************
-wire cnt_clk_reload;
+wire clk_en;
 
-assign cnt_clk_reload = (cnt_clk[7:0] == PRESCALER) ? 1'b1:1'b0;
+assign clk_en = (cnt_clk[7:0] == PRESCALER) ? 1'b1:1'b0;
 
 always @(posedge clk or negedge rst_n) 
 begin
     if(rst_n == 1'b0) begin
         cnt_clk[7:0] <= #U_DLY 8'h00;
     end
+    else if(curr_state == STATE_IDLE) begin
+        cnt_clk[7:0] <= #U_DLY 8'h00;
+    end    
+    else if(cnt_clk[7:0] == PRESCALER) begin
+        cnt_clk[7:0] <= #U_DLY 8'h00;
+    end
     else begin
-        if(curr_state == STATE_IDLE)
-            cnt_clk[7:0] <= #U_DLY 8'h00;
-        else begin
-            if(cnt_clk[7:0] == PRESCALER)
-                cnt_clk[7:0] <= #U_DLY 8'h00;
-            else
-                cnt_clk[7:0] <= #U_DLY cnt_clk[7:0] + 1'b1;
-        end
+        cnt_clk[7:0] <= #U_DLY cnt_clk[7:0] + 1'b1;
     end
 end
 
 always @(posedge clk or negedge rst_n) 
 begin
     if(rst_n == 1'b0) begin
-        scl_cnt[7:0] <= #U_DLY 8'b0000_0001;
+        scl_cnt[3:0] <= #U_DLY 4'b0001;
+    end
+    else if(cnt_clk[7:0] == PRESCALER && scl_cnt[3:0] == 4'b1111) begin
+        scl_cnt[3:0] <= #U_DLY 4'b0001;
+    end
+    else if(cnt_clk[7:0] == PRESCALER) begin
+        scl_cnt[3:0] <= #U_DLY {scl_cnt[2:0],1'b1};
     end
     else begin
-        if(cnt_clk[7:0] == PRESCALER && scl_cnt[7:0] == 8'b1111_1111)
-            scl_cnt[7:0] <= #U_DLY 8'b0000_0001;
-        else if(cnt_clk[7:0] == PRESCALER)
-            scl_cnt[7:0] <= #U_DLY {scl_cnt[6:0],1'b1};
-        else
-            scl_cnt[7:0] <= #U_DLY scl_cnt[7:0];
+        scl_cnt[3:0] <= #U_DLY scl_cnt[3:0];
     end
 end
 
@@ -413,16 +504,16 @@ end
 always @(posedge clk or negedge rst_n) 
 begin
     if(rst_n == 1'b0) begin
-        cnt_sda[7:0] <= #U_DLY 8'h00;
+        num_bit[7:0] <= #U_DLY 8'h00;
     end
-    else if(cnt_sda[7:0] == 8'h8 && scl_pos == 1'b1) begin
-        cnt_sda[7:0] <= #U_DLY 8'h0;
+    else if(num_bit[7:0] == 8'h8 && scl_pos == 1'b1) begin
+        num_bit[7:0] <= #U_DLY 8'h0;
     end
     else if((curr_state == STATE_ADDR || curr_state == STATE_WR_DAT || curr_state == STATE_RD_DAT)&& scl_pos == 1'b1) begin
-        cnt_sda[7:0] <= #U_DLY cnt_sda[7:0] + 1'b1;
+        num_bit[7:0] <= #U_DLY num_bit[7:0] + 1'b1;
     end 
     else if(curr_state == STATE_START || curr_state == STATE_STOP || curr_state == STATE_RESTART) begin
-        cnt_sda[7:0] <= #U_DLY 8'h0;
+        num_bit[7:0] <= #U_DLY 8'h0;
     end
 end
 
@@ -488,26 +579,6 @@ end
 //                flag信号输出
 //**************************************************************************
 
-always @(posedge clk or negedge rst_n) 
-begin
-    if(rst_n == 1'b0) begin
-        flag_ack <= #U_DLY 1'b0;
-        flag_nack <= #U_DLY 1'b0;
-    end
-    else if (
-            (curr_state == STATE_ADDR   && next_state == STATE_ACK0) ||
-            (curr_state == STATE_WR_DAT && next_state == STATE_ACK1) ||
-            (curr_state == STATE_RD_DAT && next_state == STATE_ACK2)
-        )
-        flag_ack <= #U_DLY 1'b1;
-    else if((curr_state == STATE_WR_DAT || curr_state == STATE_RD_DAT) && next_state == STATE_NACK)
-        flag_nack <= #U_DLY 1'b1;
-    else begin
-        flag_ack <= #U_DLY 1'b0;
-        flag_nack <= #U_DLY 1'b0;
-    end
-end
-
 // always @(posedge clk or negedge rst_n) 
 // begin
 //     if(rst_n == 1'b0) begin
@@ -515,20 +586,42 @@ end
 //         flag_nack <= #U_DLY 1'b0;
 //     end
 //     else if (
-//             (curr_state == STATE_ACK0 ) ||
-//             (curr_state == STATE_ACK1 ) ||
-//             (curr_state == STATE_ACK2 )
-//     ) begin
-//         if(scl_pos == 1'b1 && sda_filter == 1'b0)
-//             flag_ack <= #U_DLY 1'b1;
-//     end
-//     else if(curr_state == STATE_NACK)
+//             (curr_state == STATE_ADDR   && next_state == STATE_ACK0) ||
+//             (curr_state == STATE_WR_DAT && next_state == STATE_ACK1) ||
+//             (curr_state == STATE_RD_DAT && next_state == STATE_ACK2)
+//         )
+//         flag_ack <= #U_DLY 1'b1;
+//     else if((curr_state == STATE_WR_DAT || curr_state == STATE_RD_DAT) && next_state == STATE_NACK)
 //         flag_nack <= #U_DLY 1'b1;
 //     else begin
 //         flag_ack <= #U_DLY 1'b0;
 //         flag_nack <= #U_DLY 1'b0;
 //     end
 // end
+
+always @(posedge clk or negedge rst_n) 
+begin
+    if(rst_n == 1'b0) begin
+        flag_ack <= #U_DLY 1'b0;
+        flag_nack <= #U_DLY 1'b0;
+    end
+    else if (
+            (curr_state == STATE_ACK0 ) ||
+            (curr_state == STATE_ACK1 ) ||
+            (curr_state == STATE_ACK2 )
+    ) begin
+        if(scl_pos == 1'b1 && sda_filter == 1'b0)
+            flag_ack <= #U_DLY 1'b1;
+    end
+    else if(curr_state == STATE_NACK) begin
+        if(scl_pos == 1'b1)
+            flag_nack <= #U_DLY 1'b1;
+    end
+    else begin
+        flag_ack <= #U_DLY 1'b0;
+        flag_nack <= #U_DLY 1'b0;
+    end
+end
 
 always @(posedge clk or negedge rst_n) 
 begin
