@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
-[*] Tue Aug 30 13:36:43 2022
+[*] Tue Aug 30 16:09:42 2022
 [*]
-[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220830_213545.vcd"
-[dumpfile_mtime] "Tue Aug 30 13:35:46 2022"
-[dumpfile_size] 72935
+[dumpfile] "D:\FPGA\verilog\i2c_master_test\build\test_case_20220831_000914.vcd"
+[dumpfile_mtime] "Tue Aug 30 16:09:14 2022"
+[dumpfile_size] 408398
 [savefile] "D:\FPGA\verilog\i2c_master_test\build\wave.gtkw"
 [timestart] 0
 [size] 1920 1017
 [pos] -1 -1
-*-20.497311 4063000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-24.392244 56100000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test_case.
 [treeopen] test_case.u_test_harness.
 [treeopen] test_case.u_test_harness.u_i2c_master_top.
@@ -31,21 +31,28 @@ test_case.u_test_harness.u_i2c_master_top.u_i2c_master.write_data[7:0]
 @28
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.write_en
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_filter
-test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_out
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen
 [color] 2
-test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_out
-test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_neg
-test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_pos
 test_case.u_test_harness.u_i2c_master_top.flag_ack
 test_case.u_test_harness.u_i2c_master_top.flag_nack
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_restar
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_start
 test_case.u_test_harness.u_i2c_master_top.flag_stop
 @29
-test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen_pre
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.flag_stretch
 @28
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_filter
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen_pre
 test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_oen_pre
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.sda_oen
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_oen
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.clk_en
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.scl_cnt[3:0]
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.clk
+@22
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.num_bit[7:0]
+@28
+test_case.u_test_harness.u_i2c_master_top.u_i2c_master.bit_end
 @1000200
 -Group
 @800200

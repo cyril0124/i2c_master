@@ -137,7 +137,7 @@ task i2c_recv_bytes;
             wait(read_en);
             recv_data[7:0] <= read_data[7:0];
             $strobe("[%d]byte:0x%h",$time,recv_data);
-            @(posedge scl_out); //等待下一波数据
+            @(posedge scl_oen); //等待下一波数据
         end
 
         conti_receive = 1'b0;
@@ -216,11 +216,11 @@ task i2c_sim_rd;
             
             //上升沿采样数据
             for(j=0;j<8;j++) begin
-                @(posedge scl_out)
+                @(posedge scl_oen)
                 sim_rd[7:0] = {sim_rd[6:0],sda_out};
             end
             //等待ack
-            @(posedge scl_out);
+            @(posedge scl_oen);
 
             $strobe("[%d]rd:0x%h",$time,sim_rd);
         end
@@ -248,7 +248,7 @@ task i2c_sim_wr;
             bytes[63:0] <= #U_DLY bytes[63:0] >> 8;
             // $strobe("\n[%d]i2c_sim_wr send:0x%h!",$time,bytes[7:0]);
             for(j=0;j<8;j++) begin
-                @(negedge scl_out);
+                @(negedge scl_oen);
                 sda_in <= #U_DLY data_send[7];
                 data_send[7:0] <= #U_DLY data_send[7:0] << 1;
             end
@@ -282,7 +282,7 @@ wire       read_en;
 reg       conti_write;
 reg       conti_receive;
 
-wire scl_out;
+wire scl_oen;
 reg  sda_in;
 wire sda_out;
 wire sda_oen;
@@ -308,21 +308,24 @@ initial begin
 end
 
 wire sda_in_master;
+wire scl_in_master;
 
-assign sda = (sda_oen == 1'b1) ? sda_out : 1'bz;
+assign sda = (sda_oen == 1'b0) ? 1'b0 : 1'bz;
 assign sda_in_master = sda;
+assign scl = (scl_oen == 1'b0) ? 1'b0 : 1'bz;
+assign scl_in_master = scl;
 
 i2c_master#(
-    .PRESCALER  ( 1 )
+    .PRESCALER  ( 7 )
 )u_i2c_master(
     .clk        ( clk        ),
     .rst_n      ( rst_n      ),
 
-    .init_finish(init_finish),
-    .scl_out    ( scl_out    ),
-    .sda_in     ( sda_in_master ), //仿真i2c slave时,需把.sda_in()输入设置为sda,其他情况则设置成sda_in
-    .sda_out    ( sda_out    ),
-    .sda_oen    ( sda_oen    ),
+    .init_finish( init_finish   ),
+    .scl_in     ( 1'b1 ),
+    .scl_oen    ( scl_oen       ),
+    .sda_in     ( sda_in_master ), //仿真i2c slave时,需把.sda_in()输入设置为sda,其他情况则设置成sda_in sda_in_master
+    .sda_oen    ( sda_oen       ),
 
     .slave_addr ( i2c_slave_addr ),
     .i2c_rw     ( i2c_rw         ),
@@ -344,8 +347,7 @@ i2c_master#(
 );
 
 
-assign scl = scl_out;
-assign sda = (sda_out == 1'b0) ? 1'b0 : 1'bz;
+
 
 
 endmodule
