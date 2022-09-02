@@ -409,20 +409,21 @@ end
 //**************************************************************************
 //                i2c_begin
 //**************************************************************************
-assign i2c_begin_sig = (~i2c_begin_dly[3]&i2c_begin_dly[2]);
+assign i2c_begin_sig = i2c_begin;
+// assign i2c_begin_sig = (~i2c_begin_dly[3]&i2c_begin_dly[2]);
 
-always @(posedge clk or negedge rst_n) 
-begin
-    if(rst_n == 1'b0) begin
-        i2c_begin_dly[3:0] <= #U_DLY 4'b0000;
-    end
-    else if(i2c_begin == 1'b1) begin
-        i2c_begin_dly[3:0] <= #U_DLY {i2c_begin_dly[2:0],1'b1};
-    end
-    else begin
-        i2c_begin_dly[3:0] <= #U_DLY {i2c_begin_dly[2:0],1'b0};
-    end
-end
+// always @(posedge clk or negedge rst_n) 
+// begin
+//     if(rst_n == 1'b0) begin
+//         i2c_begin_dly[3:0] <= #U_DLY 4'b0000;
+//     end
+//     else if(i2c_begin == 1'b1) begin
+//         i2c_begin_dly[3:0] <= #U_DLY {i2c_begin_dly[2:0],1'b1};
+//     end
+//     else begin
+//         i2c_begin_dly[3:0] <= #U_DLY {i2c_begin_dly[2:0],1'b0};
+//     end
+// end
 
 
 //**************************************************************************

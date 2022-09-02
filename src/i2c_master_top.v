@@ -17,7 +17,8 @@ task generate_i2c_start;
     begin
         i2c_begin = 1'b1;
         i2c_begin_finish = 1'b0;
-        #(begin_time);
+        // #(begin_time);
+        @(posedge clk);
         i2c_begin = 1'b0;
         i2c_begin_finish = 1'b1;
     end
