@@ -8,6 +8,12 @@ module test_harness();
 reg clk;
 reg rst_n;
 
+wire scl;
+wire sda;
+pullup(scl);
+pullup(sda);
+
+
 parameter U_DLY = 1;
 parameter CLK_PERIOD = 83; //10MHz--100 12MHz--83 50MHz--20 48MHz--10
 
@@ -24,10 +30,6 @@ initial begin
     rst_n = 1'b1;
 end
 
-wire scl;
-wire sda;
-pullup(scl);
-pullup(sda);
 
 i2c_master_top u_i2c_master_top
 (

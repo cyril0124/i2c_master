@@ -64,7 +64,7 @@ reg         sda_oen_pre   ; //sda输出暂存
 wire        scl_filter    ; //scl输入滤波
 wire        sda_filter    ; //sda输入滤波
 wire        i2c_begin_sig ; //i2c开始信号
-
+wire        bit_end       ; //i2c写一个bit信号结束标志
 
 reg [7:0]   curr_state    ; //状态机 现态
 reg [7:0]   next_state    ; //状态机 次态
@@ -478,7 +478,6 @@ end
 //                sda数据计数
 //**************************************************************************
 
-wire bit_end;
 assign bit_end = (scl_cnt[3:0] == 4'b1111 && clk_en);
 
 always @(posedge clk or negedge rst_n) 
