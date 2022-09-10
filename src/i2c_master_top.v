@@ -33,19 +33,17 @@ task i2c_send_one_byte;
             i2c_rw = 1'b0;
         end
         generate_i2c_start(CLK_PERIOD*2);
-        wait(flag_start);
 
         i2c_slave_addr[7:0] = addr[7:0];
-        @(posedge flag_ack);
 
+        @(posedge write_rdy);
         write_data[7:0] = byte[7:0];
         @(posedge clk) #U_DLY
         write_en = 1'b1;
         @(posedge clk) #U_DLY
         write_en = 1'b0;
-        @(posedge flag_nack);
 
-        wait(flag_stop);
+        @(posedge flag_stop);
         // $strobe("\n[%d]addr:0x%h byte:0x%h i2c_send_one_byte done!\n",$time,addr,byte);
     end
 endtask
@@ -63,12 +61,11 @@ task i2c_send_bytes;
             i2c_rw = 1'b0;
         end
         generate_i2c_start(CLK_PERIOD*2);
-        wait(flag_start);
 
         i2c_slave_addr[7:0] = addr[7:0];
-        @(posedge flag_ack);
 
         for(i=0;i<num;i++) begin
+            @(posedge write_rdy);
             write_data[7:0] <= bytes[7:0];
             bytes[63:0] <= bytes[63:0] >> 8;
 
@@ -77,18 +74,11 @@ task i2c_send_bytes;
             @(posedge clk) #U_DLY
             write_en = 1'b0;
 
-            if(i==num-1) begin
+            if(i==num-1)
                 conti_write = 1'b0;
-                @(posedge flag_nack);
-            end
-            else begin
-                conti_write = 1'b1;
-                @(posedge flag_ack);
-            end
         end
-        // @(posedge flag_nack);
         
-        wait(flag_stop);
+        @(posedge flag_stop);
         $strobe("\n[%d]addr:0x%h byte:0x%h i2c_send_bytes done!\n",$time,addr,temp_bytes);
     end
 endtask
@@ -129,22 +119,19 @@ task i2c_recv_bytes;
         end
         $strobe("\n[%d]addr:0x%h num:0x%h i2c_recv_bytes start!>>>",$time,addr,num);
         generate_i2c_start(CLK_PERIOD*2);
-        wait(flag_start);
 
         i2c_slave_addr[7:0] = addr[7:0];
-        @(posedge flag_ack);
 
-        for(i=0;i<num;i++) begin
-            wait(read_en);
+        for(i=0;i<num;i=i) begin
+            @(posedge read_en);
             recv_data[7:0] <= read_data[7:0];
             $strobe("[%d]byte:0x%h",$time,recv_data);
-            @(posedge scl_oen); //等待下一波数据
+            i=i+1;
+            if(i==num-1)
+                conti_receive = 1'b0;
         end
 
-        conti_receive = 1'b0;
-
-        @(posedge flag_nack);
-        wait(flag_stop);
+        @(posedge flag_stop);
         $strobe("[%d]i2c_recv_bytes done!<<<\n",$time);
     end
 endtask
@@ -160,30 +147,34 @@ task i2c_eeprom_random_read;
             conti_write = 1'b1;
         end
         generate_i2c_start(CLK_PERIOD*2);
-        wait(flag_start);
+        // wait(flag_start);
 
         i2c_slave_addr[7:0] = addr[7:0];
-        @(posedge flag_ack);
+        // @(posedge flag_ack);
 
         if(word_addr_num[7:0] == 8'h02) begin
+            @(posedge write_rdy);
             write_data[7:0] = word_address[15:8];
             @(posedge clk) #U_DLY
             write_en = 1'b1;
             @(posedge clk) #U_DLY
             write_en = 1'b0;
-            @(posedge flag_ack);
+            // @(posedge flag_ack);
         end
         
         if(word_addr_num[7:0] == 8'h02 || word_addr_num[7:0] == 8'h01) begin
+            @(posedge write_rdy);
             write_data[7:0] = word_address[7:0];
             @(posedge clk) #U_DLY
             write_en = 1'b1;
             @(posedge clk) #U_DLY
             write_en = 1'b0;
-            @(posedge flag_ack);
+            // @(posedge flag_ack);
         end
 
+        @(posedge write_rdy);
         i2c_rw = 1'b1; //读
+
         wait(flag_restar);
 
         @(posedge flag_ack); //等待i2c发送读地址
@@ -278,6 +269,7 @@ reg       i2c_rw;
 reg [7:0] i2c_slave_addr;
 reg [7:0] write_data;
 reg       write_en;
+wire      write_rdy;
 wire [7:0] read_data;
 wire       read_en;
 reg       conti_write;
@@ -337,6 +329,7 @@ i2c_master#(
 
     .write_data ( write_data ),
     .write_en   ( write_en   ),
+    .write_rdy  ( write_rdy  ),
     .read_data  ( read_data  ),
     .read_en    ( read_en    ),
 
